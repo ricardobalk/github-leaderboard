@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import Chart from '../components/chart';
 
 export async function getStaticProps() {
   const client = new ApolloClient({
@@ -51,7 +52,11 @@ export async function getStaticProps() {
   const totalNumberOfRepositories = commitHistory.organization.repositories.nodes.length;
   const totalNumberOfCommits = repoAndCommitCount.reduce((total, repo) => total + repo.commitCount, 0);
   const mostPopularRepo = repoAndCommitCount.sort((a, b) => b.commitCount - a.commitCount)[0];
-  const topFiveRepos = repoAndCommitCount.sort((a, b) => b.commitCount - a.commitCount).slice(0, 5);
+  const topFiveRepos = repoAndCommitCount.sort((a, b) => b.commitCount - a.commitCount);
+  const topRepoData = topFiveRepos.map(repo => ({
+    name: repo.name,
+    commits: repo.commitCount,
+  })).filter(repo => repo.commits > 0);
 
   return {
     props: {
@@ -60,6 +65,7 @@ export async function getStaticProps() {
       repoAndCommitCount,
       mostPopularRepo,
       topFiveRepos,
+      topRepoData,
       totalNumberOfCommits,
     }
   }
@@ -90,7 +96,7 @@ export default function Home({...props}) {
             <p><strong>{props.mostPopularRepo.name}</strong> with a whooping {props.mostPopularRepo.commitCount} contributions.!</p>
           </a>
 
-          <div class="top-five">
+          <div className="top-five">
             <h2>Top 5 repositories</h2>
             <ul>
               {props.topFiveRepos.map(repo => (
@@ -99,6 +105,10 @@ export default function Home({...props}) {
                 </li>
               ))}
             </ul>
+          </div>
+
+          <div className="graph">
+            <Chart data={props.topRepoData}/>
           </div>
         </div>
       </main>
