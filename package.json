@@ -1,7 +1,9 @@
 {
-  "name": "linku-assessment",
-  "version": "0.1.0",
-  "private": true,
+  "name": "github-leaderboard",
+  "description": "GitHub Leaderboard, made with React (Next.js)",
+  "version": "0.0.1-alpha1",
+  "repository": "github:ricardobalk/github-leaderboard",
+  "license": "ISC",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
