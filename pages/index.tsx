@@ -99,8 +99,8 @@ export default function Home({...props}) {
           <div className="top-five">
             <h2>Top 5 repositories</h2>
             <ul>
-              {props.topFiveRepos.map(repo => (
-                <li>
+              {props.topFiveRepos.map((repo: Record<string, string | number>) => (
+                <li key={repo.name}>
                   <strong>{repo.name}</strong> with {repo.commitCount} contributions.
                 </li>
               ))}
